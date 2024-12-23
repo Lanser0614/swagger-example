@@ -1,0 +1,162 @@
+openapi: 3.0.0
+info:
+  title: 'Laravel API'
+  description: 'API Documentation'
+  version: 1.0.0
+  contact:
+    name: ''
+    url: ''
+    email: ''
+  license:
+    name: ''
+    url: ''
+servers:
+  -
+    url: 'http://swagegr-example-app.test'
+    description: 'API Server'
+paths:
+  /api/register-new:
+    post:
+      tags:
+        - user
+      summary: Register
+      description: 'Handle POST request to api/register-new'
+      operationId: register
+      parameters: {  }
+      responses:
+        200:
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token: { type: string }
+                  user: { type: object, properties: { id: { type: integer }, email: { type: string }, password: { type: string } } }
+        422:
+          description: 'Validation error'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string }
+                  errors: { type: object, additionalProperties: { type: array, items: { type: string } } }
+      requestBody:
+        description: 'Request data for api/register-new'
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+              required:
+                - name
+                - email
+                - password
+      security:
+        -
+          bearerAuth: {  }
+  /api/login-new:
+    post:
+      tags:
+        - user
+      summary: Login
+      description: 'Handle POST request to api/login-new'
+      operationId: login
+      parameters: {  }
+      responses:
+        200:
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token: { type: string }
+                  user: { type: object, properties: { id: { type: integer }, email: { type: string }, password: { type: string } } }
+        422:
+          description: 'Validation error'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message: { type: string }
+                  errors: { type: object, additionalProperties: { type: array, items: { type: string } } }
+      requestBody:
+        description: 'Request data for api/login-new'
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      security:
+        -
+          bearerAuth: {  }
+  /api/users:
+    get:
+      tags:
+        - user
+      summary: '*'
+      description: 'Handle GET request to api/users'
+      operationId: index
+      parameters:
+        -
+          name: email
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Search by email'
+        -
+          name: name
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 'Search by name'
+      responses:
+        200:
+          description: 'Successful operation'
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  pagination: { type: object, properties: { total: { type: integer, example: 1 }, count: { type: integer, example: 1 }, per_page: { type: integer, example: 1 }, current_page: { type: integer, example: 1 }, total_pages: { type: integer, example: 1 } } }
+                  data: { type: array, items: { type: object, properties: { name: { type: string }, email: { type: string } } } }
+      security:
+        -
+          bearerAuth: {  }
+components:
+  schemas: {  }
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+    apiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+tags:
+  -
+    name: user
+    description: 'Endpoints for api'
